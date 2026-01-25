@@ -7,6 +7,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Database\Seeders\Clientseeder;
 use Database\Seeders\TransactionSeeder;
+use Database\Seeders\BankWebhookSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,6 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             Clientseeder::class,
             TransactionSeeder::class,
+            BankWebhookSeeder::class,
         ]);
     }
 }
