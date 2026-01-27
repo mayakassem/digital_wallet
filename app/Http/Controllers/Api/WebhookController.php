@@ -3,25 +3,20 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use App\Models\BankWebhook;
+use App\Services\Webhooks\WebhookStoreService;
 
 class WebhookController extends Controller
 {
+    public function __construct(
+        private WebhookStoreService $webhookStoreService,
+    ) {}
+
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        $bank = $request->header('X-Bank-Name');
-        $payload = $request->json();
-
-        BankWebhook::create([
-            'bank' => $bank,
-            'payload' => $payload,
-            'status' => 'pending',
-            'received_at' => now(),
-        ]);
-
+        $this->webhookStoreService->storeWebhook($request);
         return response()->json(['status' => 'ok']);
     }
 }
