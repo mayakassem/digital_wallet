@@ -14,8 +14,14 @@ class Transaction extends Model
         'client_id',
         'reference',
         'amount',
-        'transaction_date',
+        'year',
+        'month',
+        'day',
         'bank_name',
+    ];
+
+     protected $casts = [
+        'amount' => 'decimal:2',
     ];
 
     //relations

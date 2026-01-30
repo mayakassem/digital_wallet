@@ -17,8 +17,10 @@ return new class extends Migration
         $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
 
         $table->string('reference');
-        $table->decimal('amount', 12, 2);
-        $table->date('transaction_date');
+        $table->decimal('amount', 10, 2);
+        $table->string('year');
+        $table->string('month');
+        $table->string('day');
         $table->string('bank_name');
 
         $table->timestamps();
