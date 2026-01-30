@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Models\BankWebhook;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use App\Services\Webhooks\WebhookProcessingService;
 
 class ProcessWebhookJob implements ShouldQueue
 {

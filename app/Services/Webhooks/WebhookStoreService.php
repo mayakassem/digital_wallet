@@ -4,6 +4,7 @@ namespace App\Services\Webhooks;
 
 use Illuminate\Http\Request;
 use App\Models\BankWebhook;
+use App\Jobs\ProcessWebhookJob;
 
 class WebhookStoreService
 {
@@ -12,12 +13,14 @@ class WebhookStoreService
         $bank = $this->getBankName($request);
         $payload = $this->getRawPayload($request);
 
-        BankWebhook::create([
+        $webhook = BankWebhook::create([
             'bank' => $bank,
             'payload' => $payload,
             'status' => 'pending',
             'received_at' => now(),
         ]);
+
+        ProcessWebhookJob::dispatch($webhook);
     }
 
     private function getBankName(Request $request)
