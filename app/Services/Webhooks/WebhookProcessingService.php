@@ -9,6 +9,7 @@ use App\Services\Webhooks\BankResolverService;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use App\Models\Client;
+use App\Notifications\Factories\NotificationServiceFactory;
 
 class WebhookProcessingService
 {
@@ -48,6 +49,33 @@ class WebhookProcessingService
             'bank_name' => $bankName,
         ]);
 
+        $notificationType = $this->resolveNotificationType($webhook);
+
+        $notificationService = NotificationServiceFactory::make($notificationType);
+
+        $notificationService->notify('Transaction completed');
+
         $webhook->update(['status' => 'processed']);
     }
+
+    private function resolveNotificationType(BankWebhook $webhook): string
+    {
+        $payload = trim($webhook->payload, "\"");
+
+        $payload = stripslashes($payload);
+
+        $notificationType = str()->afterLast($payload, '=');
+
+        $notificationType = strtolower(trim($notificationType, "\"' \t\n\r"));
+
+        Log::info('Resolved notification type FINAL', [
+            'type' => $notificationType
+        ]);
+
+        return in_array($notificationType, ['sms', 'email', 'push'])
+            ? $notificationType
+            : 'email';
+    }
+
+
 }
