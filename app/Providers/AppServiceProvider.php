@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
+use App\Builders\ProductBuilderInterface;
+use App\Builders\ProductConcreteBuilder;
 use App\Services\PayTechBankParser;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -12,7 +14,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(PayTechBankParser::class, PayTechBankParser::class);
+        $this->app->bind(ProductBuilderInterface::class, ProductConcreteBuilder::class
+    );
     }
 
     /**
